@@ -38,10 +38,11 @@ public class PersistantAccountDAO implements AccountDAO {   private SQLiteDataba
         Cursor cursor = expenseDatabase.rawQuery("SELECT * FROM Account",null);
         List<Account> accountList = new ArrayList<Account>();
 
-        int bank = cursor.getColumnIndex("Bank");
-        int holder=cursor.getColumnIndex("Holder");
-        int balance=cursor.getColumnIndex("Balance");
+
         if(cursor.moveToFirst()) {
+            int bank = cursor.getColumnIndex("Bank");
+            int holder=cursor.getColumnIndex("Holder");
+            int balance=cursor.getColumnIndex("Balance");
             do {
                 Account account = new Account(cursor.getString(cursor.getColumnIndex("Account_no")),
                         cursor.getString(bank),
@@ -60,11 +61,16 @@ public class PersistantAccountDAO implements AccountDAO {   private SQLiteDataba
         Account account = null;
 
         if(cursor.moveToFirst()) {
+            int bank = cursor.getColumnIndex("Bank");
+            int holder=cursor.getColumnIndex("Holder");
+            int balance=cursor.getColumnIndex("Balance");
+            int accountno =cursor.getColumnIndex("Account_no");
             do {
-                account = new Account(cursor.getString(cursor.getColumnIndex("Account_no")),
-                        cursor.getString(cursor.getColumnIndex("Bank")),
-                        cursor.getString(cursor.getColumnIndex("Holder")),
-                        cursor.getDouble(cursor.getColumnIndex("Balance")));
+                account = new Account(
+                        cursor.getString(accountno),
+                        cursor.getString(bank),
+                        cursor.getString(holder),
+                        cursor.getDouble(balance));
             } while (cursor.moveToNext());
         }
 

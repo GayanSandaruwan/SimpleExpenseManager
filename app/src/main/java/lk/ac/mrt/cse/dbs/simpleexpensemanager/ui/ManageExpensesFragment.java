@@ -20,6 +20,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,6 +48,7 @@ public class ManageExpensesFragment extends Fragment implements View.OnClickList
     private RadioGroup expenseTypeGroup;
     private DatePicker datePicker;
     private ExpenseManager currentExpenseManager;
+    private ArrayAdapter adapter;
 
     public static ManageExpensesFragment newInstance(ExpenseManager expenseManager) {
         ManageExpensesFragment manageExpensesFragment = new ManageExpensesFragment();
@@ -68,13 +70,15 @@ public class ManageExpensesFragment extends Fragment implements View.OnClickList
         amount = (EditText) rootView.findViewById(R.id.amount);
         accountSelector = (Spinner) rootView.findViewById(R.id.account_selector);
         currentExpenseManager = (ExpenseManager) getArguments().get(EXPENSE_MANAGER);
-        ArrayAdapter<String> adapter =
+        //ArrayAdapter<String>
+        this.adapter =
                 null;
         if (currentExpenseManager != null) {
-            adapter = new ArrayAdapter<>(this.getActivity(), R.layout.support_simple_spinner_dropdown_item,
+            this.adapter = new ArrayAdapter<>(this.getActivity(), R.layout.support_simple_spinner_dropdown_item,
                     currentExpenseManager.getAccountNumbersList());
         }
         accountSelector.setAdapter(adapter);
+
 
         expenseTypeGroup = (RadioGroup) rootView.findViewById(R.id.expense_type_group);
         RadioButton expenseType = (RadioButton) rootView.findViewById(R.id.expense);
@@ -119,6 +123,7 @@ public class ManageExpensesFragment extends Fragment implements View.OnClickList
                     }
                 }
                 amount.getText().clear();
+                adapter.notifyDataSetChanged();
                 break;
         }
     }
